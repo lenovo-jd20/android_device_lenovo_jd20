@@ -358,10 +358,6 @@ PRODUCT_PACKAGES += \
     libprotobuf-cpp-lite-vendorcompat \
     libprotobuf-cpp-full-vendorcompat \
 
-# Recovery
-PRODUCT_PACKAGES += \
-    librecovery_updater_jd20
-
 # Sensors
 PRODUCT_PACKAGES += \
     android.hardware.sensors@1.0-impl:64 \
