@@ -1,6 +1,6 @@
 on boot
-    chown system system /sys/devices/platform/soc/soc:qcom,dsi-display/fod_ui
-    chmod 0444 /sys/devices/platform/soc/soc:qcom,dsi-display/fod_ui
+    chown system system /sys/class/backlight/panel0-hbm/brightness
+    chmod 0666 /sys/class/backlight/panel0-hbm/brightness
 
 service fingerprint-inscreen-1-0 /vendor/bin/hw/vendor.lineage.biometrics.fingerprint.inscreen@1.0-service.jd20
     interface vendor.lineage.biometrics.fingerprint.inscreen@1.0::IFingerprintInscreen default

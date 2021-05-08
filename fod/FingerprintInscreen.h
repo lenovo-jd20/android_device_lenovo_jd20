@@ -18,8 +18,7 @@
 #define VENDOR_LINEAGE_BIOMETRICS_FINGERPRINT_INSCREEN_V1_0_FINGERPRINTINSCREEN_H
 
 #include <vendor/lineage/biometrics/fingerprint/inscreen/1.0/IFingerprintInscreen.h>
-#include <vendor/xiaomi/hardware/fingerprintextension/1.0/IXiaomiFingerprint.h>
-#include <vendor/xiaomi/hardware/touchfeature/1.0/ITouchFeature.h>
+#include <vendor/goodix/extend/service/2.0/IGoodixFPExtendService.h>
 
 namespace vendor {
 namespace lineage {
@@ -32,8 +31,7 @@ namespace implementation {
 using ::android::sp;
 using ::android::hardware::Return;
 using ::android::hardware::Void;
-using ::vendor::xiaomi::hardware::fingerprintextension::V1_0::IXiaomiFingerprint;
-using ::vendor::xiaomi::hardware::touchfeature::V1_0::ITouchFeature;
+using ::vendor::goodix::extend::service::V2_0::IGoodixFPExtendService;
 
 class FingerprintInscreen : public IFingerprintInscreen {
 public:
@@ -55,11 +53,12 @@ public:
     Return<void> setCallback(const sp<IFingerprintInscreenCallback>& callback) override;
 
 private:
-    sp<ITouchFeature> touchFeatureService;
-    sp<IXiaomiFingerprint> xiaomiFingerprintService;
+    bool mFodCircleVisible;
+    sp<IGoodixFPExtendService> mVendorFpService;
 
     std::mutex mCallbackLock;
     sp<IFingerprintInscreenCallback> mCallback;
+    bool mFingerPressed;
 };
 
 }  // namespace implementation

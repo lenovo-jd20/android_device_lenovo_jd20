@@ -43,25 +43,6 @@
 
 namespace {
 
-static bool readBool(int fd) {
-    char c;
-    int rc;
-
-    rc = lseek(fd, 0, SEEK_SET);
-    if (rc) {
-        LOG(ERROR) << "failed to seek fd, err: " << rc;
-        return false;
-    }
-
-    rc = read(fd, &c, sizeof(char));
-    if (rc != 1) {
-        LOG(ERROR) << "failed to read bool from fd, err: " << rc;
-        return false;
-    }
-
-    return c != '0';
-}
-
 } // anonymous namespace
 
 namespace vendor {
@@ -72,34 +53,30 @@ namespace inscreen {
 namespace V1_0 {
 namespace implementation {
 
+/*
+ * Write value to path and close file.
+ */
+template <typename T>
+static void set(const std::string& path, const T& value) {
+    std::ofstream file(path);
+    file << value;
+    LOG(INFO) << "wrote path: " << path << ", value: " << value << "\n";
+}
+
+template <typename T>
+static T get(const std::string& path, const T& def) {
+    std::ifstream file(path);
+    T result;
+
+    file >> result;
+    return file.fail() ? def : result;
+}
+
+
 FingerprintInscreen::FingerprintInscreen() {
-    touchFeatureService = ITouchFeature::getService();
-    xiaomiFingerprintService = IXiaomiFingerprint::getService();
-
-    std::thread([this]() {
-        int fd = open(FOD_UI_PATH, O_RDONLY);
-        if (fd < 0) {
-            LOG(ERROR) << "failed to open fd, err: " << fd;
-            return;
-        }
-
-        struct pollfd fodUiPoll = {
-            .fd = fd,
-            .events = POLLERR | POLLPRI,
-            .revents = 0,
-        };
-
-        while (true) {
-            int rc = poll(&fodUiPoll, 1, -1);
-            if (rc < 0) {
-                LOG(ERROR) << "failed to poll fd, err: " << rc;
-                continue;
-            }
-
-            xiaomiFingerprintService->extCmd(COMMAND_NIT,
-                    readBool(fd) ? PARAM_NIT_FOD : PARAM_NIT_NONE);
-        }
-    }).detach();
+    this->mFodCircleVisible = false;
+	this->mFingerPressed = false;
+    this->mVendorFpService = IGoodixFPExtendService::getService();
 }
 
 Return<int32_t> FingerprintInscreen::getPositionX() {
@@ -115,6 +92,7 @@ Return<int32_t> FingerprintInscreen::getSize() {
 }
 
 Return<void> FingerprintInscreen::onStartEnroll() {
+    this->mVendorFpService->goodixExtendCommand(CMD_FINGERPRINT_EVENT, 1);
     return Void();
 }
 
@@ -131,39 +109,15 @@ Return<void> FingerprintInscreen::onRelease() {
 }
 
 Return<void> FingerprintInscreen::onShowFODView() {
-    touchFeatureService->setTouchMode(TOUCH_FOD_ENABLE, 1);
     return Void();
 }
 
 Return<void> FingerprintInscreen::onHideFODView() {
-    touchFeatureService->resetTouchMode(TOUCH_FOD_ENABLE);
     return Void();
 }
 
 Return<bool> FingerprintInscreen::handleAcquired(int32_t acquiredInfo, int32_t vendorCode) {
-    std::lock_guard<std::mutex> _lock(mCallbackLock);
-    if (mCallback == nullptr) {
-        return false;
-    }
-
-    if (acquiredInfo == FINGERPRINT_ACQUIRED_VENDOR) {
-        if (vendorCode == 22) {
-            Return<void> ret = mCallback->onFingerDown();
-            if (!ret.isOk()) {
-                LOG(ERROR) << "FingerDown() error: " << ret.description();
-            }
-            return true;
-        }
-
-        if (vendorCode == 23) {
-            Return<void> ret = mCallback->onFingerUp();
-            if (!ret.isOk()) {
-                LOG(ERROR) << "FingerUp() error: " << ret.description();
-            }
-            return true;
-        }
-    }
-
+    LOG(ERROR) << "acquiredInfo: " << acquiredInfo << ", vendorCode: " << vendorCode << "\n";
     return false;
 }
 

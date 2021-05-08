@@ -122,7 +122,6 @@ ODM_MANIFEST_FILES += $(DEVICE_PATH)/manifest-qva.xml
 DEVICE_MATRIX_FILE := $(DEVICE_PATH)/compatibility_matrix.xml
 ODM_MANIFEST_SKUS += jd20
 ODM_MANIFEST_DAVINCI_FILES := \
-    $(DEVICE_PATH)/nfc-manifest.xml \
     $(DEVICE_PATH)/manifest-qva.xml
 
 # Keystore
