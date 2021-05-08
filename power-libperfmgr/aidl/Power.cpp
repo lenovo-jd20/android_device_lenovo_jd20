@@ -21,19 +21,19 @@
 
 #include <mutex>
 
+#define TAP_TO_WAKE_NODE "/sys/devices/virtual/touch/tp_dev/gesture_on"
+
 #include <android-base/file.h>
 #include <android-base/logging.h>
 #include <android-base/properties.h>
+#include <android-base/stringprintf.h>
 #include <android-base/strings.h>
+
+#include <mutex>
 
 #include <utils/Log.h>
 #include <utils/Trace.h>
 
-#include <linux/input.h>
-
-constexpr char kInputEventWakeupNode[] = "/dev/input/event2";
-constexpr int kInputEventWakeupModeOff = 4;
-constexpr int kInputEventWakeupModeOn = 5;
 
 namespace aidl {
 namespace google {
@@ -77,14 +77,7 @@ ndk::ScopedAStatus Power::setMode(Mode type, bool enabled) {
     switch (type) {
         case Mode::DOUBLE_TAP_TO_WAKE:
             {
-            int fd = open(kInputEventWakeupNode, 02);
-            struct input_event ev;
-            ev.type = EV_SYN;
-            ev.code = SYN_CONFIG;
-            ev.value = enabled ? kInputEventWakeupModeOn : kInputEventWakeupModeOff;
-            write(fd, &ev, sizeof(ev));
-            close(fd);
-            break;
+            ::android::base::WriteStringToFile(enabled ? "1" : "0", TAP_TO_WAKE_NODE);
             }
         case Mode::LOW_POWER:
             break;
