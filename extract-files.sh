@@ -9,7 +9,7 @@
 set -e
 
 DEVICE=jd20
-VENDOR=xiaomi
+VENDOR=lenovo
 
 # Load extract_utils and do some sanity checks
 MY_DIR="${BASH_SOURCE%/*}"
