@@ -15,16 +15,14 @@
 # limitations under the License.
 #
 
-BOARD_VENDOR := xiaomi
+BOARD_VENDOR := lenovo
 
-DEVICE_PATH := device/xiaomi/davinci
+DEVICE_PATH := device/lenovo/jd20
 
 # Build
 BUILD_BROKEN_PREBUILT_ELF_FILES := true
 BUILD_BROKEN_DUP_RULES := true
 
-# APEX
-DEXPREOPT_GENERATE_APEX_IMAGE := true
 
 # Architecture
 TARGET_ARCH := arm64
@@ -40,9 +38,8 @@ TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := generic
 TARGET_2ND_CPU_VARIANT_RUNTIME := cortex-a76
-
 # Assert
-TARGET_OTA_ASSERT_DEVICE := davinci,davinciin
+TARGET_OTA_ASSERT_DEVICE := jd20
 
 # Bootloader
 TARGET_BOOTLOADER_BOARD_NAME := sm6150
@@ -52,7 +49,7 @@ TARGET_NO_BOOTLOADER := true
 BOARD_BOOTIMG_HEADER_VERSION := 2
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom androidboot.console=ttyMSM0 service_locator.enable=1 swiotlb=1 earlycon=msm_geni_serial,0x880000 loop.max_part=7 cgroup.memory=nokmem,nosocket
-#BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
+BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
 BOARD_KERNEL_PAGESIZE := 4096
 BOARD_INCLUDE_DTB_IN_BOOTIMG := true
@@ -62,7 +59,7 @@ BOARD_KERNEL_SEPARATED_DTBO := true
 TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_CLANG_COMPILE := true
 TARGET_KERNEL_CONFIG := vendor/sdmsteppe-perf_defconfig
-TARGET_KERNEL_SOURCE := kernel/xiaomi/davinci
+TARGET_KERNEL_SOURCE := kernel/xiaomi/jd20
 
 # Platform
 TARGET_BOARD_PLATFORM := sm6150
@@ -106,7 +103,7 @@ TARGET_HAS_WIDE_COLOR_DISPLAY := true
 TARGET_USES_DISPLAY_RENDER_INTENTS := true
 TARGET_USES_DRM_PP := true
 TARGET_USES_COLOR_METADATA := true
-TARGET_SCREEN_DENSITY := 390
+TARGET_SCREEN_DENSITY := 420
 
 # DRM
 TARGET_ENABLE_MEDIADRM_64 := true
@@ -118,16 +115,12 @@ TARGET_FS_CONFIG_GEN := $(DEVICE_PATH)/config.fs
 BOARD_HAVE_QCOM_FM := true
 TARGET_QCOM_NO_FM_FIRMWARE := true
 
-# FOD
-TARGET_SURFACEFLINGER_FOD_LIB := //$(DEVICE_PATH):libfod_extension.davinci
-TARGET_USES_FOD_ZPOS := true
-
 # HIDL
 DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/manifest.xml
 DEVICE_MANIFEST_FILE += $(DEVICE_PATH)/c2_manifest.xml
 ODM_MANIFEST_FILES += $(DEVICE_PATH)/manifest-qva.xml
 DEVICE_MATRIX_FILE := $(DEVICE_PATH)/compatibility_matrix.xml
-ODM_MANIFEST_SKUS += davinci
+ODM_MANIFEST_SKUS += jd20
 ODM_MANIFEST_DAVINCI_FILES := \
     $(DEVICE_PATH)/nfc-manifest.xml \
     $(DEVICE_PATH)/manifest-qva.xml
@@ -161,7 +154,6 @@ BOARD_USES_METADATA_PARTITION := true
 BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
 
 TARGET_USERIMAGES_USE_F2FS := true
-TARGET_USERIMAGES_SPARSE_EXT_DISABLED := false
 TARGET_USES_MKE2FS := true
 
 TARGET_COPY_OUT_VENDOR := vendor
@@ -180,7 +172,7 @@ TARGET_RECOVERY_UI_MARGIN_HEIGHT := 120
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/fstab.qcom
 
 # Releasetools
-TARGET_RECOVERY_UPDATER_LIBS := librecovery_updater_davinci
+TARGET_RECOVERY_UPDATER_LIBS := librecovery_updater_jd20
 TARGET_RELEASETOOLS_EXTENSIONS := $(DEVICE_PATH)
 
 # RIL
@@ -196,10 +188,6 @@ include device/qcom/sepolicy_vndr/SEPolicy.mk
 BOARD_PLAT_PRIVATE_SEPOLICY_DIR += $(DEVICE_PATH)/sepolicy/private
 BOARD_PLAT_PUBLIC_SEPOLICY_DIR += $(DEVICE_PATH)/sepolicy/public
 BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/vendor
-
-# Vendor init
-TARGET_INIT_VENDOR_LIB := //$(DEVICE_PATH):libinit_davinci
-TARGET_RECOVERY_DEVICE_MODULES := libinit_davinci
 
 # Verified Boot
 BOARD_AVB_ENABLE := true
@@ -226,4 +214,4 @@ WIFI_HIDL_UNIFIED_SUPPLICANT_SERVICE_RC_ENTRY := true
 WPA_SUPPLICANT_VERSION := VER_0_8_X
 
 # Inherit from the proprietary version
--include vendor/xiaomi/davinci/BoardConfigVendor.mk
+-include vendor/lenovo/jd20/BoardConfigVendor.mk

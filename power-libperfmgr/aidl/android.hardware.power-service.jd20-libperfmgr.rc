@@ -30,7 +30,7 @@ on init
     chmod 0664 /sys/class/devfreq/soc:qcom,cpu0-cpu-l3-lat/min_freq
     chmod 0664 /sys/class/devfreq/soc:qcom,cpu6-cpu-l3-lat/min_freq
 
-service vendor.power-hal-aidl /vendor/bin/hw/android.hardware.power-service.davinci-libperfmgr
+service vendor.power-hal-aidl /vendor/bin/hw/android.hardware.power-service.jd20-libperfmgr
     class hal
     user root
     group system input

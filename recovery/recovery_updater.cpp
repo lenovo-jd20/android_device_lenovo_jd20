@@ -189,6 +189,6 @@ Value * VerifyBasebandFn(const char *name, State *state,
     return StringValue(strdup(ret ? "1" : "0"));
 }
 
-void Register_librecovery_updater_davinci() {
+void Register_librecovery_updater_jd20() {
     RegisterFunction("xiaomi.verify_baseband", VerifyBasebandFn);
 }

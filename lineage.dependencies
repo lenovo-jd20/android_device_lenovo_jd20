@@ -1,13 +1,13 @@
 [
   { 
-      "repository"   : "vendor_xiaomi_davinci",
-      "target_path"  : "vendor/xiaomi/davinci",
+      "repository"   : "vendor_xiaomi_jd20",
+      "target_path"  : "vendor/xiaomi/jd20",
       "branch"       : "eleven",
       "remote"       : "pixel-devices-blobs"
   },
   { 
-      "repository"   : "kernel_xiaomi_davinci",
-      "target_path"  : "kernel/xiaomi/davinci",
+      "repository"   : "kernel_xiaomi_jd20",
+      "target_path"  : "kernel/xiaomi/jd20",
       "branch"       : "eleven"
   },
   { 

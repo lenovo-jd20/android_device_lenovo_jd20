@@ -15,7 +15,7 @@
  */
 
 #define ATRACE_TAG (ATRACE_TAG_POWER | ATRACE_TAG_HAL)
-#define LOG_TAG "android.hardware.power-service.davinci-libperfmgr"
+#define LOG_TAG "android.hardware.power-service.jd20-libperfmgr"
 
 #include "Power.h"
 

@@ -3,7 +3,7 @@ Copyright (C) 2019 Paranoid Android
 Device configuration for Xiaomi Mi 9T/Redmi K20
 ===============================================
 
-The Xiaomi Mi 9T/Redmi K20, codenamed _"davinci(in)"_, is a mid-range smartphone from Xiaomi.
+The Xiaomi Mi 9T/Redmi K20, codenamed _"jd20(in)"_, is a mid-range smartphone from Xiaomi.
 
 It was announced and released in June 2019.
 
@@ -25,4 +25,4 @@ Front Camera | 20MP Motorized pop-up
 
 ## Device picture
 
-![Xiaomi Mi 9T/Redmi K20](https://raw.githubusercontent.com/PixelExperience/official_devices/master/images/.thumbs/300/davinci.png "Xiaomi Mi 9T/Redmi K20")
+![Xiaomi Mi 9T/Redmi K20](https://raw.githubusercontent.com/PixelExperience/official_devices/master/images/.thumbs/300/jd20.png "Xiaomi Mi 9T/Redmi K20")

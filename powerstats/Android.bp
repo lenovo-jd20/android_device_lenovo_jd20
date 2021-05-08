@@ -13,10 +13,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 cc_binary {
-    name: "android.hardware.power.stats@1.0-service.davinci",
+    name: "android.hardware.power.stats@1.0-service.jd20",
     relative_install_path: "hw",
-    vintf_fragments: ["android.hardware.power.stats@1.0-service.davinci.xml"],
-    init_rc: ["android.hardware.power.stats@1.0-service.davinci.rc"],
+    vintf_fragments: ["android.hardware.power.stats@1.0-service.jd20.xml"],
+    init_rc: ["android.hardware.power.stats@1.0-service.jd20.rc"],
     srcs: ["service.cpp"],
     cflags: [
         "-Wall",

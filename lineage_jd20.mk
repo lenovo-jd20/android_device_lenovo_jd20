@@ -13,17 +13,26 @@
 # limitations under the License.
 
 # Inherit from those products. Most specific first.
-$(call inherit-product, device/xiaomi/davinci/device.mk)
+$(call inherit-product, device/lenovo/jd20/device.mk)
 
-# Inherit some common PixelExperience stuff.
-$(call inherit-product, vendor/aosp/config/common_full_phone.mk)
+# Inherit some common Lineage stuff.
+$(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 
 TARGET_BOOT_ANIMATION_RES := 1080
 TARGET_GAPPS_ARCH := arm64
-TARGET_USES_AOSP_RECOVERY := true
 
 # Device identifier. This must come after all inclusions.
-PRODUCT_NAME := aosp_davinci
-PRODUCT_DEVICE := davinci
-PRODUCT_BRAND := Xiaomi
-PRODUCT_MANUFACTURER := Xiaomi
+PRODUCT_NAME := lineage_jd20
+PRODUCT_DEVICE := jd20
+PRODUCT_BRAND := Lenovo
+PRODUCT_MANUFACTURER := Lenovo
+PRODUCT_MODEL := Lenovo L78121
+
+BUILD_FINGERPRINT := "google/walleye/walleye:8.1.0/OPM1.171019.011/4448085:user/release-keys"
+
+PRODUCT_BUILD_PROP_OVERRIDES += \
+    PRIVATE_BUILD_DESC="jd20-user 10 QKQ1.190825.002 11.5.229_200114 release-keys" \
+    PRODUCT_NAME="jd20" \
+    TARGET_DEVICE="jd20"
+
+PRODUCT_GMS_CLIENTID_BASE := android-lenovo

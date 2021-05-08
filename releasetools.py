@@ -16,12 +16,6 @@
 import common
 import re
 
-def FullOTA_Assertions(info):
-  AddBasebandAssertion(info, info.input_zip)
-
-def IncrementalOTA_Assertions(info):
-  AddBasebandAssertion(info, info.target_zip)
-
 def FullOTA_InstallEnd(info):
   OTA_InstallEnd(info, False)
   return
@@ -45,14 +39,3 @@ def OTA_InstallEnd(info, incremental):
   AddImage(info, "vbmeta.img", "/dev/block/bootdevice/by-name/vbmeta", incremental)
   AddImage(info, "dtbo.img", "/dev/block/bootdevice/by-name/dtbo", incremental)
   return
-
-def AddBasebandAssertion(info, input_zip):
-  android_info = input_zip.read("OTA/android-info.txt")
-  variants = []
-  for variant in ('in', 'cn', 'ww'):
-    result = re.search(r'require\s+version-{}\s*=\s*(\S+)'.format(variant), android_info)
-    if result is not None:
-      variants.append(result.group(1).split(','))
-  cmd = 'assert(getprop("ro.boot.hwc") == "{0}" && (xiaomi.verify_baseband("{2}", "{1}") == "1" || abort("ERROR: This package requires baseband from atleast {2}. Please upgrade your firmware to latest one available and retry! Get the latest firmware from www.xiaomifirmwareupdater.com. DO NOT REMOVE ASSERT LINES FROM THIS ZIP!");) || true);' 
-  for variant in variants:
-    info.script.AppendExtra(cmd.format(*variant))
