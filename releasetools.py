@@ -37,5 +37,4 @@ def AddImage(info, basename, dest, incremental):
 
 def OTA_InstallEnd(info, incremental):
   AddImage(info, "vbmeta.img", "/dev/block/bootdevice/by-name/vbmeta", incremental)
-  AddImage(info, "dtbo.img", "/dev/block/bootdevice/by-name/dtbo", incremental)
   return
