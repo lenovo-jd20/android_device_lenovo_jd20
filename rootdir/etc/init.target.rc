@@ -27,10 +27,9 @@
 #
 #
 
-import /vendor/etc/init/init.batterysecret.rc
-import /vendor/etc/init/init.mi_thermald.rc
 
 on early-init
+    exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules audio_wglink audio_q6_pdr audio_q6_notifier audio_snd_event audio_apr audio_adsp_loader audio_q6 audio_native audio_usf audio_pinctrl_wcd audio_pinctrl_lpi audio_swr audio_platform audio_hdmi audio_wcd_spi audio_stub audio_wcd_core audio_wsa881x audio_hdmi audio_bolero_cdc audio_wsa_macro audio_va_macro audio_rx_macro audio_tx_macro audio_machine_talos audio_wcd937x audio_wcd937x_slave audio_tfa98xx
     write /proc/sys/kernel/sched_boost 1
 
 on init
@@ -57,9 +56,6 @@ on init
     chmod 0660 /dev/drv8846_dev
     chmod 0660 /dev/akm09970
 
-on property:ro.boot.product.hardware.sku=jd20
-    enable vendor.nfc_hal_service
-
 on early-fs
     start vold
 
@@ -67,23 +63,14 @@ on fs
     mount_all --early
     chown root system /mnt/vendor/persist
     chmod 0771 /mnt/vendor/persist
+    chmod 0777 /mnt/vendor/persist/westalgo
+    chmod 0777 /mnt/vendor/persist/westalgo/aec_sync
+    chmod 0777 /mnt/vendor/persist/westalgo/aesync_flag.txt
+    chmod 0777 /mnt/vendor/persist/westalgo/dualcam_cali.bin
+    chmod 0777 /mnt/vendor/persist/westalgo/dualcam_cali_8.bin
+    chmod 0777 /mnt/vendor/persist/westalgo/calibration_flag.txt
     restorecon_recursive /mnt/vendor/persist
     mkdir /mnt/vendor/persist/data 0700 system system
-    mkdir /mnt/vendor/persist/haptics 0755 system system
-    mkdir /mnt/vendor/persist/subsys 0770 root system
-    mkdir /dev/logfs 0771 system system
-    mkdir /mnt/vendor/persist/audio 0755 system system
-    #+ add for watermark
-    mkdir /mnt/vendor/persist/camera 0777 root root
-    mount vfat /dev/block/bootdevice/by-name/logfs /dev/logfs noatime umask=006,uid=1000,gid=1000
-    chown system system /dev/tfa_reg
-    chown system system /dev/tfa_rw
-    chown system system /dev/tfa_rpc
-    chown system system /dev/tfa_control
-    chmod 0660 /dev/tfa_reg
-    chmod 0660 /dev/tfa_rw
-    chmod 0660 /dev/tfa_rpc
-    chmod 0660 /dev/tfa_control
 
 on post-fs
     # set RLIMIT_MEMLOCK to 64MB
@@ -102,12 +89,24 @@ service sec_nvm /vendor/bin/sec_nvm
 
 on post-fs-data
     mkdir /data/vendor/nfc 0770 nfc nfc
-    mkdir /data/vendor/hbtp 0750 system system
+#    mkdir /data/vendor/hbtp 0750 system system
     mkdir /persist/qti_fp 0700 system system
     mkdir /data/vendor/nnhal 0700 system system
+        mkdir /data/vendor/dolby 0770 media media
+
     mkdir /data/vendor/thermal 0771 root system
     mkdir /data/vendor/thermal/config 0771 root system
     chown system system /mnt/vendor/persist/display
+    #LENOVO_CUSTOM add for westalgo begin
+    mkdir /data/vendor/camera/westalgo 0770 camera camera
+    #copy west algo
+    copy /vendor/lib64/camera/model_mdl_cache     /data/vendor/camera/westalgo/model_mdl_cache
+    copy /vendor/lib64/camera/cache_data          /data/vendor/camera/westalgo/cache_data
+    copy /vendor/lib64/camera/megviisegment_model /data/vendor/camera/westalgo/megviisegment_model
+    chown cameraserver cameraserver /data/vendor/camera/westalgo/model_mdl_cache
+    chown cameraserver cameraserver /data/vendor/camera/westalgo/cache_data
+    chown cameraserver cameraserver /data/vendor/camera/westalgo/megviisegment_model
+    #LENOVO_CUSTOM add for westalgo end
 
 # For cpusets initialize for Silver Only first and then Silver + Gold
 # Silver Only configuration cannot work with 0-7
@@ -123,8 +122,14 @@ on boot
     write /dev/cpuset/background/cpus 0-7
     write /dev/cpuset/system-background/cpus 0-7
 
-    #palm_sensor
-    chown system system /sys/class/touch/touch_dev/palm_sensor
+
+# access permissions for FPC service
+   chown system system /sys/bus/platform/devices/soc/soc:fpc1020/irq
+   chown system system /sys/bus/platform/devices/soc/soc:fpc1020/wakeup_enable
+   chmod 0666 /dev/qseecom
+
+#Load WLAN driver
+    insmod /vendor/lib/modules/qca_cld3_wlan.ko
 
     #USB controller configuration
     setprop vendor.usb.rndis.func.name "gsi"
@@ -206,3 +211,9 @@ service vendor.nfc_hal_service /vendor/bin/hw/android.hardware.nfc@1.2-service
     user nfc
     group nfc
     disabled
+# Huaqin add SAMSUNG Remosaic start
+service remosaic_daemon /system/vendor/bin/remosaic_daemon
+    class late_start
+    user camera
+    group camera
+# Huaqin add SAMSUNG Remosaic end
