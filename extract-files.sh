@@ -57,10 +57,7 @@ fi
 
 function blob_fixup() {
     case "${1}" in
-        vendor/lib/hw/audio.primary.sm6150.so|vendor/lib64/hw/audio.primary.sm6150.so)
-        "${PATCHELF}" --add-needed "libprocessgroup.so" "${2}"
-        "${PATCHELF}" --replace-needed "libtinycompress_vendor.so" "libtinycompress.so" "${2}"
-        ;;
+
     esac
 }
 
