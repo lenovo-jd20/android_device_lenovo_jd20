@@ -38,9 +38,13 @@ PRODUCT_COPY_FILES += \
 
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += \
-    $(LOCAL_PATH)/overlay
+    $(LOCAL_PATH)/overlay \
+    $(LOCAL_PATH)/overlay-lineage
 
 PRODUCT_ENFORCE_RRO_TARGETS += *
+PRODUCT_ENFORCE_RRO_EXCLUDED_OVERLAYS += \
+    $(LOCAL_PATH)/overlay-lineage/lineage-sdk \
+    $(LOCAL_PATH)/overlay-lineage/packages/apps/Snap
 
 # Product characteristics
 PRODUCT_CHARACTERISTICS := nosdcard
@@ -128,7 +132,14 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     libdng_sdk.vendor \
     android.hardware.camera.provider@2.4-impl:64 \
-    android.hardware.camera.provider@2.4-service_64
+    android.hardware.camera.provider@2.4-service_64 \
+    libshim-vidhance \
+    libgui_vendor \
+    vendor.qti.hardware.camera.device@1.0 \
+    vendor.qti.hardware.camera.device@1.0.vendor
+
+PRODUCT_COPY_FILES += \
+     prebuilts/vndk/v28/arm64/arch-arm64-armv8-a/shared/vndk-sp/libc++.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libc+P.so
 
 PRODUCT_PACKAGES += \
     CameraGo
@@ -236,13 +247,6 @@ PRODUCT_PACKAGES += \
 # Signapk
 PRODUCT_HOST_PACKAGES += \
     signapk
-
-# IFAA manager
-PRODUCT_PACKAGES += \
-    org.ifaa.android.manager
-
-PRODUCT_BOOT_JARS += \
-    org.ifaa.android.manager
 
 # Init
 PRODUCT_PACKAGES += \
