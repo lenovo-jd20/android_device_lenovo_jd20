@@ -18,28 +18,24 @@
 
 #include "FingerprintInscreen.h"
 
+#include <unistd.h>
 #include <android-base/logging.h>
+#include <hidl/HidlTransportSupport.h>
 #include <fstream>
 #include <cmath>
 #include <thread>
 
-#include <fcntl.h>
-#include <poll.h>
 #include <sys/stat.h>
 
 #define FINGERPRINT_ACQUIRED_VENDOR 6
 
-#define COMMAND_NIT 10
-#define PARAM_NIT_FOD 1
-#define PARAM_NIT_NONE 0
+#define CMD_FINGERPRINT_EVENT 10
 
-#define TOUCH_FOD_ENABLE 10
+#define HBM_ENABLE_PATH "/sys/class/backlight/panel0-hbm/brightness"
 
-#define FOD_UI_PATH "/sys/devices/platform/soc/soc:qcom,dsi-display/fod_ui"
-
-#define FOD_SENSOR_X 445
-#define FOD_SENSOR_Y 1931
-#define FOD_SENSOR_SIZE 190
+#define FOD_SENSOR_X 450
+#define FOD_SENSOR_Y 1916
+#define FOD_SENSOR_SIZE 178
 
 namespace {
 
@@ -97,14 +93,19 @@ Return<void> FingerprintInscreen::onStartEnroll() {
 }
 
 Return<void> FingerprintInscreen::onFinishEnroll() {
+    set(HBM_ENABLE_PATH, 0);
     return Void();
 }
 
 Return<void> FingerprintInscreen::onPress() {
+    this->mVendorFpService->goodixExtendCommand(CMD_FINGERPRINT_EVENT, 1);
+    set(HBM_ENABLE_PATH, 1);
     return Void();
 }
 
 Return<void> FingerprintInscreen::onRelease() {
+    this->mVendorFpService->goodixExtendCommand(CMD_FINGERPRINT_EVENT, 0);
+    set(HBM_ENABLE_PATH, 0);
     return Void();
 }
 
@@ -130,8 +131,17 @@ Return<void> FingerprintInscreen::setLongPressEnabled(bool) {
     return Void();
 }
 
-Return<int32_t> FingerprintInscreen::getDimAmount(int32_t /* brightness */) {
-    return 0;
+Return<int32_t> FingerprintInscreen::getDimAmount(int32_t brightness) {
+    float alpha;
+    int realBrightness = brightness * 2047 / 255;
+
+    if (realBrightness > 500) {
+        alpha = 1.0 - pow(realBrightness / 2047.0 * 430.0 / 600.0, 0.455);
+    } else {
+        alpha = 1.0 - pow(realBrightness / 1680.0, 0.455);
+    }
+
+    return 255 * alpha;
 }
 
 Return<bool> FingerprintInscreen::shouldBoostBrightness() {
