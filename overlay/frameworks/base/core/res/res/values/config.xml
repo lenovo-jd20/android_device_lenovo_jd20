@@ -588,4 +588,32 @@
         <!-- ID0:Fingerprint:Strong -->
         <item>0:2:15</item>
     </string-array>
+    
+    <string translatable="false" name="config_mainBuiltInDisplayCutout">
+        M -150,0
+        C -17,0,-84,68,0,75
+        C 84,68,17,0,150,0
+        Z
+    </string>
+
+    <!-- Like config_mainBuiltInDisplayCutout, but this path is used to report the
+         one single bounding rect per device edge to the app via
+         {@link DisplayCutout#getBoundingRect}. Note that this path should try to match the visual
+         appearance of the cutout as much as possible, and may be smaller than
+         config_mainBuiltInDisplayCutout -->
+    <string translatable="false" name="config_mainBuiltInDisplayCutoutRectApproximation">
+        M -76.9985203,12.6526029
+        C -66.7142769,24.2251334 -58.6436698,34.9109506 -52.7866989,44.7100544
+        C -41.8225823,63.0604145 -22.0817847,75 0.00269388614,75
+        C 22.0871725,75 41.8225823,63.0604145 52.7920867,44.7100544
+        C 58.6467515,34.9122099 66.7153603,24.2272938 76.9979132,12.6553061
+        L 77,0 L-76.9991414,0
+        L -76.9985203,12.6526029
+        Z
+    </string>
+
+    <!-- Whether the display cutout region of the main built-in display should be forced to
+         black in software (to avoid aliasing or emulate a cutout that is not physically existent). -->
+    <bool name="config_fillMainBuiltInDisplayCutout">true</bool>
+
 </resources>
