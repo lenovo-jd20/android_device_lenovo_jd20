@@ -11,7 +11,7 @@ ro.bluetooth.emb_wp_mode=false
 ro.bluetooth.wipower=false
 
 # Camera
-vendor.camera.aux.packagelist=org.codeaurora.snapcam,com.android.camera,com.google.android.GoogleCamera
+vendor.camera.aux.packagelist=org.codeaurora.snapcam,com.android.camera,com.google.android.GoogleCamera,com.zui.camera
 
 # Charger
 ro.charger.enable_suspend=true
@@ -29,13 +29,6 @@ ro.com.google.ime.height_ratio=1.1
 ro.surface_flinger.has_wide_color_display=true
 ro.surface_flinger.has_HDR_display=true
 
-# Set lmkd options
-ro.config.low_ram = false
-ro.lmk.kill_heaviest_task = true
-ro.lmk.kill_timeout_ms = 100
-ro.lmk.use_minfree_levels = true
-ro.lmk.log_stats = true
-
 # Media
 media.settings.xml=/vendor/etc/media_profiles_vendor.xml
 media.stagefright.enable-aac=true
@@ -50,9 +43,6 @@ vendor.mm.enable.qcom_parser=67108863
 
 # Netflix custom property
 ro.netflix.bsp_rev=Q6150-17263-1
-
-# NFC DT
-ro.nfc.port=I2C
 
 # RCS
 persist.rcs.supported=1
