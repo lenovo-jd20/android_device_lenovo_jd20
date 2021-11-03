@@ -13,7 +13,14 @@ on early-boot
     chown system system /sys/class/backlight/panel1-backlight/brightness
     chown system system /sys/class/backlight/panel1-backlight/max_brightness
 
-service vendor.light-lenovo_msmnile /vendor/bin/hw/android.hardware.lights-service.lenovo_msmnile
+    chown system system /sys/class/leds/led:torch_0/brightness
+    chown system system /sys/class/leds/led:torch_1/brightness
+    chown system system /sys/class/leds/led:switch_0/brightness
+    chown system system /sys/class/leds/led:switch_1/brightness
+    chown system system /sys/class/leds/led:switch_2/brightness
+    chown system system /sys/class/leds/flashlight/brightness
+
+service vendor.light-lenovo_jd20 /vendor/bin/hw/android.hardware.lights-service.lenovo_jd20
     class hal
     user system
     group system

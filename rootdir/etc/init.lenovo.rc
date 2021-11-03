@@ -1,7 +1,7 @@
 import init.set_kptr.rc
 
 on post-fs
-    #goodix
+    # permissions for goodix FP
     chown system system /dev/goodix_fp
     chmod 666 /dev/goodix_fp
     chown system system /sys/class/dsi_hbm/hbm/enable
@@ -10,27 +10,21 @@ on post-fs
     chown audioserver audio  /sys/bus/i2c/devices/2-0034/rw
 
 on init
+    # permissions for camera
+    chown system camera /dev/drv8846_dev
+    chown system camera /dev/akm09970
+    chmod 0660 /dev/drv8846_dev
+    chmod 0660 /dev/akm09970
+
     # permission for dt2w
-    chown system system /sys/devices/virtual/touch/tp_dev/double_tap_enable
+    chown system system /sys/devices/virtual/touch/tp_dev/finger_match
     chown system system /sys/devices/virtual/touch/tp_dev/gesture_on
-    chmod 0660 /sys/devices/virtual/touch/tp_dev/double_tap_enable
+    chmod 0660 /sys/devices/virtual/touch/tp_dev/finger_match
     chmod 0660 /sys/devices/virtual/touch/tp_dev/gesture_on
 
-# Add factest service
-service factest /vendor/bin/factest
-	class main
-	user root
-	group root system vendor_qti_diag sdcard_rw cache drmrpc
-
-service rfs_for_fac /vendor/bin/rfs_for_fac
-    class main
-    user vendor_rfs
-    group root system vendor_rfs
-    oneshot
-
 on boot
-	start factest
-# factest end
+   chown system system /sys/bus/platform/devices/soc/soc:fpc1020/irq
+   chown system system /sys/bus/platform/devices/soc/soc:fpc1020/wakeup_enable
 
 # add for secure touch feature
 on boot
@@ -41,22 +35,48 @@ on boot
 on early-init
    insmod /vendor/lib/modules/audio_tfa9874.ko
 
-#camera tof
-service vl53l1_daemon_main /vendor/bin/vl53l1_daemon_main
-    class late_start
-    user root
-    group root
-    socket vl53l1_daemon stream 660 root system
-
 # for battery and thermal
 on boot
    chmod 666 /sys/class/power_supply/battery/user_charge_op
    chmod 666 /sys/class/power_supply/battery/user_charge_soc
 
-on boot
-   mkdir /mnt/vendor/persist/tof 0775 system system
+on fs
+    chmod 0777 /mnt/vendor/persist/westalgo
+    chmod 0777 /mnt/vendor/persist/westalgo/aec_sync
+    chmod 0777 /mnt/vendor/persist/westalgo/aesync_flag.txt
+    chmod 0777 /mnt/vendor/persist/westalgo/dualcam_cali.bin
+    chmod 0777 /mnt/vendor/persist/westalgo/dualcam_cali_8.bin
+    chmod 0777 /mnt/vendor/persist/westalgo/calibration_flag.txt
 
-# Factory reset start
-#on property:vendor.wipe_data=1
-#    factory_data_misc
-# Factory reset end
+on post-fs-data
+    chmod 0777 /data/vendor/camera
+    copy /vendor/etc/camera/Capture3AData.dat /data/vendor/camera/Capture3AData.dat
+    copy /vendor/etc/camera/Capture3AData.dat /vendor/camera/Capture3AData.dat
+    chmod 0777 /data/vendor/camera/Capture3AData.dat
+    chmod 0777 /vendor/camera/Capture3AData.dat
+
+    mkdir /data/vendor/camera/westalgo 0770 camera camera
+    #copy west algo
+    copy /vendor/lib64/camera/model_mdl_cache     /data/vendor/camera/westalgo/model_mdl_cache
+    copy /vendor/lib64/camera/cache_data          /data/vendor/camera/westalgo/cache_data
+    copy /vendor/lib64/camera/megviisegment_model /data/vendor/camera/westalgo/megviisegment_model
+    chown cameraserver cameraserver /data/vendor/camera/westalgo/model_mdl_cache
+    chown cameraserver cameraserver /data/vendor/camera/westalgo/cache_data
+    chown cameraserver cameraserver /data/vendor/camera/westalgo/megviisegment_model
+
+    chmod 0777 /data/vendor/camera
+    copy /vendor/etc/camera/Capture3AData.dat /data/vendor/camera/Capture3AData.dat
+    copy /vendor/etc/camera/Capture3AData.dat /vendor/camera/Capture3AData.dat
+    chmod 0777 /data/vendor/camera/Capture3AData.dat
+    chmod 0777 /vendor/camera/Capture3AData.dat
+
+# add user thermal file
+on boot
+    chmod 0666 /sys/devices/system/cpu/cpu0/rq-stats/mpctl
+    chown system system /sys/devices/system/cpu/cpu0/rq-stats/mpctl
+
+service remosaic_daemon /vendor/bin/remosaic_daemon
+   class late_start
+   user camera
+   group camera
+   

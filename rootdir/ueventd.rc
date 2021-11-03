@@ -33,6 +33,7 @@ firmware_directories /vendor/firmware_mnt/image/
 # the DIAG device node is not world writable/readable.
 /dev/diag                 0660   system     oem_2901
 /dev/mhi_*_pipe_4         0660   system     system
+/dev/xlog                 0660   system     audio
 
 /dev/genlock              0666   system     system
 /dev/wlan                 0660   wifi       wifi
@@ -160,6 +161,8 @@ firmware_directories /vendor/firmware_mnt/image/
 /dev/adsprpc-smd-secure   0644   system     system
 /dev/system_health_monitor 0644  radio      system
 /dev/mdss_rotator         0664   system     system
+/dev/cpu_dma_latency      0660   system     system
+/dev/cam-hyp-intf*        0660   system     camera
 
 #QDSS
 /dev/byte-cntr            0660   system    oem_2902
@@ -281,6 +284,22 @@ firmware_directories /vendor/firmware_mnt/image/
 /sys/devices/platform/soc/a84000.i2c/i2c-2/2-0020/input/input*  secure_touch          0440 system drmrpc
 /sys/devices/platform/soc/a84000.i2c/i2c-2/2-0020/input/input*  secure_touch_enable   0660 system drmrpc
 
+# native sensors input
+/sys/devices/virtual/input/input*   enable_int       0660  system   input
+/sys/devices/virtual/input/input*   gyro_op_mode     0660  system   input
+/sys/devices/virtual/input/input*   acc_range        0660  system   input
+/sys/devices/virtual/input/input*   acc_value        0660  system   input
+/sys/devices/virtual/input/input*   gyro_odr         0660  system   input
+/sys/devices/virtual/input/input*   fifo_data_sel    0660  system   input
+/sys/devices/virtual/input/input*   fifo_watermark   0660  system   input
+/sys/devices/virtual/input/input*   enable           0660  system   input
+/sys/devices/virtual/input/input*   acc_odr          0660  system   input
+/sys/devices/virtual/input/input*   temperature      0660  system   input
+/sys/devices/virtual/input/input*   acc_op_mode      0660  system   input
+/sys/devices/virtual/input/input*   fifo_bytecount   0660  system   input
+/sys/devices/virtual/input/input*   gyro_range       0660  system   input
+/sys/devices/virtual/input/input*   gyro_value       0660  system   input
+
 # GNSS Device premissions
 /dev/gnss_sirf             0660   gps     gps
 
@@ -351,6 +370,12 @@ firmware_directories /vendor/firmware_mnt/image/
 
 # Kmsg device
 /dev/kmsg                                               0620   root       system
+
+# mius iio devices
+/dev/iio:device*                                        0660   system     system
+/sys/devices/platform/us_prox.0/iio:device* buffer/enable                  0600 system system
+/sys/devices/platform/us_prox.0/iio:device* scan_elements/in_proximity_en  0600 system system
+/sys/devices/platform/us_prox.0/iio:device* scan_elements/in_timestamp_en  0600 system system
 
 # LED class devices
 /sys/class/leds/red      delay_on     0640    system    system

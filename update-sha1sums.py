@@ -20,7 +20,7 @@ import os
 import sys
 from hashlib import sha1
 
-device = 'sm8150-common'
+device = 'jd20'
 vendor = 'lenovo'
 
 with open('proprietary-files.txt', 'r') as f:
