@@ -24,8 +24,6 @@ if [ ! -f "${HELPER}" ]; then
 fi
 source "${HELPER}"
 
-PATCHELF="patchelf"
-
 # Default to sanitizing the vendor folder before extraction
 CLEAN_VENDOR=true
 
